@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/accommodations")
 @RequiredArgsConstructor
 public class AccommodationController {
-  private AccommodationService accommodationService;
+  private final AccommodationService accommodationService;
 }
