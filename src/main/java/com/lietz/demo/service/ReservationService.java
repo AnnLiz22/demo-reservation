@@ -28,6 +28,8 @@ public class ReservationService {
   }
 
   public void deleteReservation(Long id){
-    reservationRepository.deleteById(id);
+    if(reservationRepository.existsById(id)){
+        reservationRepository.deleteById(id);
   }
+}
 }
