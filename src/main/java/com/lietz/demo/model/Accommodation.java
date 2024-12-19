@@ -8,7 +8,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -17,6 +19,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table(name = "accommodations")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Accommodation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
