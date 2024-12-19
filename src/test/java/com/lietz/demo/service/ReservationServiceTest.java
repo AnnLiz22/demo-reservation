@@ -28,12 +28,12 @@ class ReservationServiceTest {
   }
 
   @Test
-  void getAllReservations() {
+  void shouldGetAllReservations() {
     List <Reservation> reservations = List.of(
         new Reservation()
     );
 
-    when(reservationService.getAllReservations()).thenReturn(reservations);
+    when(reservationRepository.findAll()).thenReturn(reservations);
     reservationService.getAllReservations();
     verify(reservationRepository, times(1)).findAll();
   }
