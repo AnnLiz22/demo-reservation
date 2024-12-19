@@ -44,7 +44,11 @@ class UserServiceTest {
   }
 
   @Test
-  void createUser() {
+  void shouldCreateUser() {
+    User user = new User(7L, "Mania", "kowalska@gmail","12345");
+    when(userRepository.save(user)).thenReturn(user);
+    userService.createUser(user);
+    Mockito.verify(userRepository, times(1)).save(user);
   }
 
   @Test
