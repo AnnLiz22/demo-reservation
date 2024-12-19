@@ -7,10 +7,13 @@ import static org.mockito.Mockito.when;
 import com.lietz.demo.model.User;
 import com.lietz.demo.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 class UserServiceTest {
@@ -33,8 +36,10 @@ class UserServiceTest {
         new User(2L, "Bartosz", "bartek@bartek", "123"),
         new User(3L, "Hania", "hania@hanna", "123"));
 
-    when(userService.getAllUsers()).thenReturn(users);
+    when(userRepository.findAll()).thenReturn(users);
     userService.getAllUsers();
+
+    Assertions.assertEquals("Anna", users.get(0).getUsername());
     verify(userRepository, times(1)).findAll();
   }
 
@@ -43,10 +48,17 @@ class UserServiceTest {
   }
 
   @Test
-  void findUserById() {
+  void shouldFindUserById() {
+    User user = new User(5L, "Ania", "kowalska@gmail","1234");
+    when(userRepository.findById(5L)).thenReturn(Optional.of(user));
+    userService.findUserById(5L);
+    Assertions.assertEquals("Ania", user.getUsername());
+    Assertions.assertEquals("kowalska@gmail", user.getEmail());
   }
 
   @Test
-  void deleteUser() {
+  void shouldInvokeDeleteUserFromRepository() {
+    userService.deleteUser(1L);
+    Mockito.verify(userRepository, times(1)).deleteById(1L);
   }
 }
