@@ -68,6 +68,6 @@ class ReservationServiceTest {
     Reservation reservation1 = reservations.get(0);
     reservationService.deleteReservation(reservation1.getId());
 
-    Mockito.verify(reservationRepository, times(1)).existsById(1L);
+    Mockito.verify(reservationRepository, times(1)).deleteById(1L);
   }
 }
