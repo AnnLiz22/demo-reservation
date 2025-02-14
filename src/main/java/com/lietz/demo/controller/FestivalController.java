@@ -4,31 +4,33 @@ import com.lietz.demo.model.Festival;
 import com.lietz.demo.service.FestivalService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-@RestController
-@RequestMapping("/api/festivals")
+@Controller
+@RequestMapping("/festivals")
 @RequiredArgsConstructor
 public class FestivalController {
   private final FestivalService festivalService;
   @GetMapping
-  public ResponseEntity<List<Festival>> getAllFestivals() {
+  public String getAllFestivals(Model model) {
     List<Festival> festivals = festivalService.findAllFestivals();
-    return ResponseEntity.ok(festivals);
+    model.addAttribute("festivals", festivals);
+    return "festivals/list";
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Festival> getFestivalById(@PathVariable Long id) {
+  public String getFestivalById(@PathVariable Long id, Model model) {
     try {
       Festival festival = festivalService.getFestivalById(id);
-      return ResponseEntity.ok(festival);
+      model.addAttribute("festival", festival);
+      return "festivals/details";
     } catch (RuntimeException e) {
-      return ResponseEntity.notFound().build();
+      return "error/404";
     }
   }
 }
