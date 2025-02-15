@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${accommodation.name}">Accommodation Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/accommodations}">Accommodations</a></li>
+            <li class="breadcrumb-item active" th:text="${accommodation.name}">Accommodation Name</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1 th:text="${accommodation.name}">Accommodation Name</h1>
+            <p class="lead" th:text="${festival.description}">Description</p>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Accommodation Details</h5>
+                    <p class="card-text">
+                        <strong>Dates:</strong>
+                        <span th:text="${#temporals.format(festival.startDate, 'dd-MM-yyyy')}">Start Date</span>
+                        to
+                        <span th:text="${#temporals.format(festival.endDate, 'dd-MM-yyyy')}">End Date</span>
+                    </p>
+                    <p class="card-text">
+                        <strong>Location:</strong>
+                        <span th:text="${festival.location}">Location</span>
+                    </p>
+                    <p class="card-text">
+                        <strong>Price:</strong>
+                        <span th:text="${festival.price}">Price</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
