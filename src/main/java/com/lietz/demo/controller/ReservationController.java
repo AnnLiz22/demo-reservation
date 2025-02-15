@@ -4,51 +4,53 @@ import com.lietz.demo.model.Reservation;
 import com.lietz.demo.service.ReservationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/reservations")
+@Controller
+@RequestMapping("/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
   private final ReservationService reservationService;
 
   @GetMapping
-  public ResponseEntity<List<Reservation>> getAllReservations() {
+  public String getAllReservations(Model model) {
     List<Reservation> reservations = reservationService.getAllReservations();
-    return ResponseEntity.ok(reservations);
+    model.addAttribute("reservations", reservations);
+    return "reservations/list";
   }
 
   @PostMapping
-  public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+  public String createReservation(@ModelAttribute Reservation reservation, Model model) {
     Reservation newReservation = reservationService.createReservation(reservation);
-    return ResponseEntity.status(HttpStatus.CREATED).body(newReservation);
+    model.addAttribute("reservation", newReservation);
+    return "reservations/list";
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+  public String getReservationById(@PathVariable Long id, Model model) {
     try {
       Reservation reservation = reservationService.getReservationById(id);
-      return ResponseEntity.ok(reservation);
+      model.addAttribute("reservation", reservation);
+      return "reservations/details";
     } catch (RuntimeException e) {
-      return ResponseEntity.notFound().build();
+      return "error/404";
     }
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+  public String deleteReservation(@PathVariable Long id) {
     try {
       reservationService.deleteReservation(id);
-      return ResponseEntity.noContent().build();
+      return "reservations/list";
     } catch (RuntimeException e) {
-      return ResponseEntity.notFound().build();
+      return "reservations/error";
     }
   }
 }
