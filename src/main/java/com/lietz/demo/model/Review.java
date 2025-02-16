@@ -24,11 +24,7 @@ public class Review {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-//  private Long userId;
-//  private Long festivalId;
-//  private Long accommodationId;
+  private Long reviewId;
   private double rating;
   private String comment;
   private LocalDateTime createdAt;
