@@ -4,52 +4,54 @@ import com.lietz.demo.model.Review;
 import com.lietz.demo.service.ReviewService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/reviews")
+@Controller
+@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
   private final ReviewService reviewService;
 
   @GetMapping
-  public ResponseEntity<List<Review>> getAllReviews() {
+  public String getAllReviews(Model model) {
     List<Review> reviews = reviewService.findAllReviews();
-    return ResponseEntity.ok(reviews);
+    model.addAttribute("reviews", reviews);
+    return "reviews/list";
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+  public String getReviewById(@PathVariable Long id, Model model) {
     try {
 
       Review review = reviewService.findReviewById(id);
-      return ResponseEntity.ok(review);
+      model.addAttribute("review", review);
+      return "reviews/details";
     } catch (RuntimeException e) {
-      return ResponseEntity.notFound().build();
+      return "error/404";
     }
   }
 
   @PostMapping
-  public ResponseEntity<Review> createReview(@RequestBody Review review) {
+  public String createReview(@ModelAttribute Review review, Model model) {
     Review newReview = reviewService.createReview(review);
-    return ResponseEntity.status(HttpStatus.CREATED).body(newReview);
+    model.addAttribute("review", newReview);
+    return "reviews/list";
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteReview(@PathVariable Long id){
+  public String deleteReview(@PathVariable Long id){
     try {
       reviewService.deleteReview(id);
-      return ResponseEntity.noContent().build();
+      return "reviews/list";
     } catch (RuntimeException e){
-      return ResponseEntity.notFound().build();
+      return "error/404";
     }
   }
 }
